@@ -7,7 +7,7 @@ Future<void> main() async {
   await File('day1/input')
       .openRead()
       .transform(utf8.decoder)
-      .transform(new LineSplitter())
+      .transform(LineSplitter())
       .forEach((line) {
     var splits = line.split(' ');
     locationIDsLeft.add(int.parse(splits.first));
@@ -36,10 +36,10 @@ num calcDistance(List<num> locationIDsLeft, List<num> locationIDsRight) {
 }
 
 num calcSimilarity(List<num> locationIDsLeft, List<num> locationIDsRight) {
-  var counts = Map<num, num>();
-  locationIDsRight.forEach((id) {
+  var counts = <num, num>{};
+  for (var id in locationIDsRight) {
     counts[id] = (counts[id] ?? 0) + 1;
-  });
+  }
   var scores = locationIDsLeft.map((id) => id * (counts[id] ?? 0));
   var similarity = scores.reduce((value, element) => value + element);
   return similarity;
