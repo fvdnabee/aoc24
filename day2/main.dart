@@ -16,19 +16,25 @@ Future<void> main() async {
   var nSafeDampening = 0;
 
   for (var report in reports) {
-    var deltas = <num>[];
-    for (int i = 0; i < report.length - 1; i++) {
-      deltas.add(report[i + 1] - report[i]);
-    }
+    List<num> deltas = calcDeltas(report);
     if (isSafe(deltas)) {
       nSafe += 1;
     }
-    if (isSafeDampening(deltas)) {
+
+    if (isSafeDampening(report)) {
       nSafeDampening += 1;
     }
   }
   print('Number of safe reports: $nSafe');
   print('Number of safe reports with dampening: $nSafeDampening');
+}
+
+List<num> calcDeltas(List<num> report) {
+  var deltas = <num>[];
+  for (int i = 0; i < report.length - 1; i++) {
+    deltas.add(report[i + 1] - report[i]);
+  }
+  return deltas;
 }
 
 bool isSafe(List<num> deltas) {
@@ -38,36 +44,16 @@ bool isSafe(List<num> deltas) {
   return pred1 && pred2;
 }
 
-bool isSafeDampening(List<num> deltas) {
-  num nIncreasing = 0, nDecreasing =0;
-  for (var delta in deltas) {
-    if (delta > 0) {
-      nIncreasing +=1;
-    } else if(delta < 0) {
-      nDecreasing +=1;
-    }
-  }
-  bool decreasing = nDecreasing > nIncreasing;
+bool isSafeDampening(List<num> report) {
+  List<num> deltas = calcDeltas(report);
+  if (isSafe(deltas)) return true;
 
-  fnc(num delta) => (decreasing) ? delta < 0 : delta > 0;
-  fnc2(num delta) => delta.abs() > 0 && delta.abs() < 4;
-
-
-  var skipped = false;
-  for (int i = 0; i < deltas.length; i++) {
-    num delta = deltas[i];
-    bool isSafe = fnc(delta) && fnc2(delta);
-    if (!isSafe) {
-      if (skipped) {
-        return false;
-      } else {
-        skipped = true;
-        if (i > 0 && i < deltas.length) { deltas[i] += deltas[i-1]; }
-        // deltas.removeAt(i);
-        // i--;
-      }
-    }
+  for (int index = 0; index < report.length; index++) {
+    var newReport = new List<num>.from(report);
+    newReport.removeAt(index);
+    List<num> deltas = calcDeltas(newReport);
+    if (isSafe(deltas)) return true;
   }
 
-  return true;
+  return false;
 }
