@@ -60,7 +60,7 @@ List<String> getAllCombinations(List<List<String>> wordSearch) {
   }
   for (final startIdx in indices) {
     final sum = startIdx[0] + startIdx[1];
-    for (int i = 0; i < 4 - sum; i++) {
+    for (int i = 0; i < nrRows - sum; i++) {
       sb.write(wordSearch[startIdx[0] + i][startIdx[1] + i]);
     }
     combinationsSEDiag.add(sb.toString());
