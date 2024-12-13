@@ -71,6 +71,7 @@ List<int> fixPages(Map<int, List<int>> rules, List<int> pages) {
           continue;
         }
         if (!rules.containsKey(candidatePage)) {
+          // should probably be last page.
           if (i < nrPages - 1) {
             validCandidate = false;
           }
