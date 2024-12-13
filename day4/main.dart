@@ -15,9 +15,11 @@ Future<void> main() async {
 
   List<String> combinations = getAllCombinations(wordSearch);
   print(combinations);
+
+  RegExp exp = RegExp(r'(XMAS)');
   int nMatches = 0;
   for (final combo in combinations) {
-    nMatches += 'XMAS'.allMatches(combo).length;
+    nMatches += exp.allMatches(combo).length;
   }
   print(nMatches);
 }
