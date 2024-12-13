@@ -22,6 +22,9 @@ Future<void> main() async {
     nMatches += exp.allMatches(combo).length;
   }
   print(nMatches);
+
+  int n = countXMAS(wordSearch);
+  print(n);
 }
 
 List<String> getAllCombinations(List<List<String>> wordSearch) {
@@ -101,4 +104,30 @@ List<String> getAllCombinations(List<List<String>> wordSearch) {
   combinations.addAll(combinationsReversed);
 
   return combinations;
+}
+
+int countXMAS(List<List<String>> wordSearch) {
+  int nrXMAS = 0;
+  var nrRows = wordSearch.length;
+  var nrCols = wordSearch[0].length;
+  String idx(int i, int j) => wordSearch[i][j];
+  const patterns = ['MAS', 'SAM'];
+
+  for (int i = 0; i < nrRows; i++) {
+    for (int j = 0; j < nrCols; j++) {
+      if (idx(i, j) != 'A') {
+        continue;
+      }
+      if (i - 1 < 0 || j - 1 < 0 || i + 1 == nrRows || j + 1 == nrCols) {
+        continue;
+      }
+
+      String diag1 = idx(i - 1, j - 1) + idx(i, j) + idx(i + 1, j + 1);
+      String diag2 = idx(i + 1, j - 1) + idx(i, j) + idx(i - 1, j + 1);
+      if (patterns.contains(diag1) && patterns.contains(diag2)) {
+        nrXMAS += 1;
+      }
+    }
+  }
+  return nrXMAS;
 }
