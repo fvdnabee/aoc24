@@ -9,6 +9,7 @@ typedef Equation = (
 
 Future<void> main() async {
   List<Equation> equations = [];
+  // await File('day7/toyinput')
   await File('day7/input')
       .openRead()
       .transform(utf8.decoder)
@@ -64,12 +65,15 @@ bool isTrueP2(Equation eq) {
     var result = operands[0];
     for (var j = 0; j < operands.length - 1; j++) {
       // WIP:
-      var x = i - (3 * j);
-      if (((i >> j) % 3) == 0) {
+      int div = pow(3, j).toInt();
+      int comp = (i ~/ div) % 3;
+      if (comp == 0) {
         result += operands[j + 1];
-      } else if (((i >> j) % 3) == 1) {
+      } else if (comp == 1) {
         result *= operands[j + 1];
-      } else {}
+      } else {
+        result = int.parse(result.toString() + operands[j + 1].toString());
+      }
     }
     if (result == testValue) {
       return true;
